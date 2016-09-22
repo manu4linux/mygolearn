@@ -10,7 +10,7 @@
         "command": "bash",
         "args": ["-c"]
     },
-    "mac": {
+    "osx": {
         "command": "bash",
         "args": ["-c"]
     },
@@ -27,8 +27,9 @@
         {
         "taskName": "go run restclient",
         "suppressTaskName": true,
-        "isBuildCommand": false,
-        "args": ["go install && restclient"]
+        "isBuildCommand": true,
+        "args": ["go build restclient/starthere.go"]
+         /*"args": ["go install github.com/manu4linux/mygolearn/restclient"]*/
         }
     ]
 }
