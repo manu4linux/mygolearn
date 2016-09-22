@@ -1,0 +1,93 @@
+// Place your settings in this file to overwrite the default settings
+{
+// Project Manager Configuration
+
+    // List the projects sorted by...
+    "projectManager.sortList": "Name",
+
+    // Should the project be opened using a New Window?
+    "projectManager.openInNewWindow": true,
+
+    // Indicates an alternative location where the `projects.json` file is stored
+    "projectManager.projectsLocation": "/Users/mpadur001c",
+
+// Git Project Manager configuration
+
+    // Specifies the base folders to search for git repositories
+    "gitProjectManager.baseProjectsFolders": [
+        "/Users/mpadur001c/golang/work/src",
+        "/Users/mpadur001c/golang/work",
+        "/Users/mpadur001c/Documents/vagrant/github_vagrant/Jul_centos7-i386"
+    ],
+
+    // Specifies whether saves repository folders' data between sessions
+    "gitProjectManager.storeRepositoriesBetweenSessions": true,
+
+    // Specifies full path to Code command to use when opening a project.
+    "gitProjectManager.codePath": "code",
+
+    // Specifies folders to be ignored. (node_modules for example), improving search performance
+    "gitProjectManager.ignoredFolders": [],
+
+    // Indicate the maximum depth of folder recursion to search for projects. Any value below 1 means there is no limit
+    "gitProjectManager.maxDepthRecursion": 8,
+
+    // Indicates if extension will validate and get the remote origin of the git repository
+    "gitProjectManager.checkRemoteOrigin": false,
+
+    // Define the behavior when opening a new project, if true a new VSCode will be opened with the selected project
+    "gitProjectManager.openInNewWindow": false,
+
+
+// Go configuration
+
+    // Run 'go build'/'go test' on save.
+    "go.buildOnSave": true,
+
+    // Flags to `go build`/`go test` used during build-on-save or running tests. (e.g. ['-ldflags="-s"'])
+    "go.buildFlags": [],
+
+    // Run Lint tool on save.
+    "go.lintOnSave": true,
+
+    // Specifies Lint tool name.
+    "go.lintTool": "gometalinter",
+
+    // Flags to pass to Lint tool (e.g. ['-min_confidenc=.8'])
+    "go.lintFlags": [],
+
+    // Run 'go tool vet' on save.
+    "go.vetOnSave": true,
+
+    // Flags to pass to `go tool vet` (e.g. ['-all', '-shadow'])
+    "go.vetFlags": [],
+
+    // Pick 'gofmt', 'goimports' or 'goreturns' to run on format.
+    "go.formatTool": "goreturns",
+
+    // Complete functions with their parameter signature
+    "go.useCodeSnippetsOnFunctionSuggest": false,
+
+    // Specifies the GOPATH to use when no environment variable is set.
+    "go.gopath": "/Users/mpadur001c/golang/work",
+
+    // Specifies the GOROOT to use when no environment variable is set.
+    "go.goroot": "/usr/local/go",
+
+    // Run formatting tool on save.
+    "go.formatOnSave": true,
+
+    // Run 'go test -coverprofile' on save
+    "go.coverOnSave": false,
+
+    // Specifies the timeout for go test in ParseDuration format.
+    "go.testTimeout": "30s",
+
+    // Enable gocode's autobuild feature
+    "go.gocodeAutoBuild": true,
+
+    // The Go build tags to use for all commands that support a `-tags '...'` argument
+    "go.buildTags": ""
+
+
+}
