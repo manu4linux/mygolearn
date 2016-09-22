@@ -1,0 +1,73 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "windows": {
+        "command": "cmd",
+        "args": ["/C"]
+    },
+    "linux": {
+        "command": "bash",
+        "args": ["-c"]
+    },
+    "mac": {
+        "command": "bash",
+        "args": ["-c"]
+    },
+    "isShellCommand": true,
+    "showOutput": "always",
+    "echoCommand": true,
+    "tasks": [
+        {
+        "taskName": "go run goscrap4pro",
+        "suppressTaskName": true,
+        "isBuildCommand": false,
+        "args": ["go install && goscrap4pro"]
+        },
+        {
+        "taskName": "go run restclient",
+        "suppressTaskName": true,
+        "isBuildCommand": false,
+        "args": ["go install && restclient"]
+        }
+    ]
+}
+/*{
+    "version": "0.1.0",
+    "command": "echo",
+    "isShellCommand": true,
+    "args": [],
+    "showOutput": "always",
+    "echoCommand": true,
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "bye",
+            "args": ["Good Bye"]
+        },
+        { 
+            "taskName": "hello",   
+            "isBuildCommand":true,
+            "args": ["Hello World"]
+        }
+    ]
+}*/
+/*{
+    "version": "0.1.0",
+    "command": "sh",
+    "args": ["-c"],
+    "isShellCommand": true,
+    "showOutput": "always",
+    //"echoCommand": true,
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "echo",
+            "args": ["echo ${workspaceRoot} ${cwd}"]
+        },
+        {
+            "taskName": "ls",
+            "args": ["ls -lah "]
+        }
+    ]
+}*/
