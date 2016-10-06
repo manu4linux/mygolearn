@@ -25,11 +25,17 @@
         "args": ["go install && goscrap4pro"]
         },
         {
+        "taskName": "go run starthere",
+        "suppressTaskName": true,
+        "isBuildCommand": false,
+        "args": ["go build restclient/starthere.go"]
+         /*"args": ["go install github.com/manu4linux/mygolearn/restclient"]*/
+        },
+        {
         "taskName": "go run restclient",
         "suppressTaskName": true,
         "isBuildCommand": true,
-        "args": ["go build restclient/starthere.go"]
-         /*"args": ["go install github.com/manu4linux/mygolearn/restclient"]*/
+        "args": ["go build restclient/restclient2.go"]
         }
     ]
 }
