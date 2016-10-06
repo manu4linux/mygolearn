@@ -66,11 +66,9 @@ func main() {
 package main
 
 import (
-	"fmt"
-	"io"
+	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -78,12 +76,14 @@ var urlstr1 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/r
 var urlstr2 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)/number"
 
 type Message1 struct {
-	Build  string
-	Id     string
-	Number string
-}
-type Message2 struct {
-	Number string
+	Id            json.Number `json:"id,Number"`
+	BuildTypeId   string
+	Number        json.Number `json:"number,Number"`
+	Status        string
+	State         string
+	BranchName    string
+	DefaultBranch bool
+	WebUrl        string
 }
 
 func main() {
@@ -103,6 +103,18 @@ func main() {
 		log.Fatalln(err)
 	}
 	defer resp.Body.Close()
+
+	//_, err = io.Copy(os.Stdout, resp.Body)
+	//fmt.Printf("Error: %v\n", err)
+
+	var m Message1
+	decoder := json.NewDecoder(resp.Body)
+	//m := Fo{}
+	err = decoder.Decode(&m)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(m)
 	/*type Animal struct {
 		Name  string
 		Order string
@@ -112,7 +124,6 @@ func main() {
 	err := json.Unmarshal(resp, &animals)
 	*/
 	// explore response object
-	_, err = io.Copy(os.Stdout, resp.Body)
-	fmt.Printf("Error: %v\n", err)
+
 	//fmt.Printf("Response Body: %v\n", (resp.Body.Read)) // or resp.String() or string(resp.Body())
 }
