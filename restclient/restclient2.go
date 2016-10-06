@@ -68,8 +68,10 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 var urlstr1 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)"
@@ -85,8 +87,22 @@ type Message2 struct {
 }
 
 func main() {
-	resp, err := http.Get(urlstr1)
 
+	var netClient = &http.Client{
+		Timeout: time.Second * 10,
+	}
+
+	req, err := http.NewRequest("GET", urlstr1, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	req.Header.Add("Accept", "application/json")
+
+	resp, err := netClient.Do(req)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer resp.Body.Close()
 	/*type Animal struct {
 		Name  string
 		Order string
@@ -96,7 +112,6 @@ func main() {
 	err := json.Unmarshal(resp, &animals)
 	*/
 	// explore response object
-	defer resp.Body.Close()
 	_, err = io.Copy(os.Stdout, resp.Body)
 	fmt.Printf("Error: %v\n", err)
 	//fmt.Printf("Response Body: %v\n", (resp.Body.Read)) // or resp.String() or string(resp.Body())
