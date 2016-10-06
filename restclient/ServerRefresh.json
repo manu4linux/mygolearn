@@ -1,0 +1,33 @@
+{
+    "components":
+    [
+        {
+        "name":"server-parent",
+        "property_name":"Parent Pom",
+        "current_version":"3.0.15",
+        "build_order":1,
+        "BuildTypeId":"CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom"
+        },
+        {
+        "name":"external",
+        "property_name":"cvsp.external.version",
+        "current_version":"3.0.20",
+        "build_order":2,
+        "BuildTypeId":"CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesExt_2"
+        },
+        {
+        "name":"ace-lib",
+        "property_name":"cvsp.ace-lib.version",
+        "current_version":"3.0.6",
+        "build_order":3,
+        "BuildTypeId":"CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesAce_2"
+        },
+        {
+        "name":"c-lib",
+        "property_name":"cvsp.c-lib.version",
+        "current_version":"3.0.14",
+        "build_order":4,
+        "BuildTypeId":"CptServers_CptServersLegac_CptServersCoreNetworkProjectsGit_ModulesCLibs20Releas"
+        }
+    ]
+}

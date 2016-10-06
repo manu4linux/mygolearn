@@ -115,15 +115,5 @@ func main() {
 		log.Fatalln(err)
 	}
 	log.Println(m)
-	/*type Animal struct {
-		Name  string
-		Order string
-	}
 
-	var animals []Animal
-	err := json.Unmarshal(resp, &animals)
-	*/
-	// explore response object
-
-	//fmt.Printf("Response Body: %v\n", (resp.Body.Read)) // or resp.String() or string(resp.Body())
 }
