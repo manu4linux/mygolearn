@@ -38,8 +38,10 @@ func main() {
 }
 */
 
+/********************************************************/
 //client code
-
+/********************************************************/
+/*
 package main
 
 import (
@@ -58,4 +60,44 @@ func main() {
 	fmt.Printf("\nResponse Time: %v", resp.Time())
 	fmt.Printf("\nResponse Recevied At: %v", resp.ReceivedAt())
 	fmt.Printf("\nResponse Body: %v", resp) // or resp.String() or string(resp.Body())
+}
+*/
+
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+var urlstr1 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)"
+var urlstr2 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)/number"
+
+type Message1 struct {
+	Build  string
+	Id     string
+	Number string
+}
+type Message2 struct {
+	Number string
+}
+
+func main() {
+	resp, err := http.Get(urlstr1)
+
+	/*type Animal struct {
+		Name  string
+		Order string
+	}
+
+	var animals []Animal
+	err := json.Unmarshal(resp, &animals)
+	*/
+	// explore response object
+	defer resp.Body.Close()
+	_, err = io.Copy(os.Stdout, resp.Body)
+	fmt.Printf("Error: %v\n", err)
+	//fmt.Printf("Response Body: %v\n", (resp.Body.Read)) // or resp.String() or string(resp.Body())
 }
