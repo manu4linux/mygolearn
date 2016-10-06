@@ -19,7 +19,7 @@ func main() {
 */
 
 /*
-//server code 
+//server code
 
 package main
 
@@ -38,8 +38,6 @@ func main() {
 }
 */
 
-
-/*
 //client code
 
 package main
@@ -61,4 +59,3 @@ func main() {
 	fmt.Printf("\nResponse Recevied At: %v", resp.ReceivedAt())
 	fmt.Printf("\nResponse Body: %v", resp) // or resp.String() or string(resp.Body())
 }
-*/
