@@ -66,9 +66,13 @@ func main() {
 package main
 
 import (
+	"bufio"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -78,12 +82,26 @@ var urlstr2 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/r
 type Message1 struct {
 	Id            json.Number `json:"id,Number"`
 	BuildTypeId   string
-	Number        json.Number `json:"number,Number"`
+	Number        string `json:"number"`
 	Status        string
 	State         string
 	BranchName    string
 	DefaultBranch bool
 	WebUrl        string
+}
+
+var m Message1
+
+type component struct {
+	Name            string      `json:"name"`
+	Property_name   string      `json:"property_name"`
+	Current_version string      `json:"current_version"`
+	Build_order     json.Number `json:"build_order,Number"`
+	BuildTypeId     string      `json:"BuildTypeId"`
+}
+
+type componentjson struct {
+	Components []component `json:"components"`
 }
 
 func main() {
@@ -97,6 +115,79 @@ func main() {
 		log.Fatalln(err)
 	}
 	req.Header.Add("Accept", "application/json")
+	/*
+		resp, err := netClient.Do(req)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		defer resp.Body.Close()
+	*/
+	//_, err = io.Copy(os.Stdout, resp.Body)
+	//fmt.Printf("Error: %v\n", err)
+	/*
+
+		decoder := json.NewDecoder(resp.Body)
+		//m := Fo{}
+		err = decoder.Decode(&m)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println(m)
+		//defer decoder.Close()
+	*/
+
+	/****************/
+	//Read from a json file
+	/****************/
+	pathtofile := "./restclient/ServerRefresh.json"
+	file, e := ioutil.ReadFile(pathtofile)
+	if e != nil {
+		fmt.Printf("File error: %v\n", e)
+		os.Exit(1)
+	}
+	//fmt.Printf("%s\n", string(file))
+
+	var mobj componentjson
+
+	err = json.Unmarshal(file, &mobj)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println("first attempt")
+	fmt.Printf("Results: %v\n\n\n", mobj)
+	log.Println(mobj)
+	// fmt.Printf("Results: %v\n\n\n", mobj.Components)
+	// log.Println(mobj.Components)
+	// fmt.Printf("Results: %v\n\n\n", mobj.Components[2])
+	// log.Println(mobj.Components[3])
+	/*
+		configFile, err := os.Open(pathtofile)
+		if err != nil {
+			log.Println("opening config file", err.Error())
+		}
+
+		decoder2 := json.NewDecoder(configFile)
+		err = decoder2.Decode(&mobj)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println("second attempt")
+		fmt.Printf("Results: %v\n\n\n", mobj)
+		log.Println(mobj)
+	*/
+	/***************************/
+	//run the rest url to get json file
+	/***************************/
+
+	urlstr3 := "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
+	urlstr3 = urlstr3 + mobj.Components[0].BuildTypeId + ")"
+	log.Println("urlstr3")
+	log.Println(urlstr3)
+	req, err = http.NewRequest("GET", urlstr3, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	req.Header.Add("Accept", "application/json")
 
 	resp, err := netClient.Do(req)
 	if err != nil {
@@ -104,10 +195,9 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	//_, err = io.Copy(os.Stdout, resp.Body)
+	//	_, err = io.Copy(os.Stdout, resp.Body)
 	//fmt.Printf("Error: %v\n", err)
 
-	var m Message1
 	decoder := json.NewDecoder(resp.Body)
 	//m := Fo{}
 	err = decoder.Decode(&m)
@@ -115,5 +205,36 @@ func main() {
 		log.Fatalln(err)
 	}
 	log.Println(m)
+	log.Println(m.Number)
+	//defer decoder.Close()
+
+	/***************************/
+	//write the file with latest verion numbers
+
+	/* file will look like below
+	   Build Order | Component | Property Name | Current Version
+	   ----------------|-----------------|----------------------|-----------------------
+	   1 | server-parent | None - this is the Parent Pom and must be directly referenced | [3.0.15](http://teamcity.cvs.ula.comcast.net:8111/viewLog.html?buildId=4062409&buildTypeId=CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)
+	   2 | external | cvsp.external.version |  3.0.20
+	   3 | ace-lib | cvsp.ace-lib.version | 3.0.6
+	   4 | c-libs | cvsp.c-libs.version | 3.0.14
+	*/
+	/***************************/
+	fileHandle, err := os.Create("table1.md")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	writer := bufio.NewWriter(fileHandle)
+	defer fileHandle.Close()
+
+	fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
+	fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
+	writer.Flush()
+	stringprint := fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
+	fmt.Fprintln(writer, stringprint)
+	writer.Flush()
+	stringprint = fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
+	fmt.Fprintln(writer, stringprint)
+	writer.Flush()
 
 }

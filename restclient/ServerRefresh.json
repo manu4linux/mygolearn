@@ -1,6 +1,5 @@
 {
-    "components":
-    [
+    "components":[
         {
         "name":"server-parent",
         "property_name":"Parent Pom",
