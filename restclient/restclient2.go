@@ -69,10 +69,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -81,23 +83,21 @@ var urlstr2 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/r
 
 type Message1 struct {
 	Id            json.Number `json:"id,Number"`
-	BuildTypeId   string
-	Number        string `json:"number"`
-	Status        string
-	State         string
-	BranchName    string
-	DefaultBranch bool
-	WebUrl        string
+	BuildTypeId   string      `json:"buildTypeId"`
+	Number        string      `json:"number"`
+	Status        string      `json:"status"`
+	State         string      `json:"state"`
+	BranchName    string      `json:"branchName"`
+	DefaultBranch bool        `json:"defaultBranch"`
+	WebUrl        string      `json:"webUrl"`
 }
 
-var m Message1
-
 type component struct {
-	Name            string      `json:"name"`
-	Property_name   string      `json:"property_name"`
-	Current_version string      `json:"current_version"`
-	Build_order     json.Number `json:"build_order,Number"`
-	BuildTypeId     string      `json:"BuildTypeId"`
+	Name           string      `json:"name"`
+	PropertyName   string      `json:"property_name"`
+	CurrentVersion string      `json:"current_version"`
+	BuildOrder     json.Number `json:"build_order,Number"`
+	BuildTypeId    string      `json:"BuildTypeId"`
 }
 
 type componentjson struct {
@@ -156,6 +156,7 @@ func main() {
 	log.Println("first attempt")
 	fmt.Printf("Results: %v\n\n\n", mobj)
 	log.Println(mobj)
+	//numberofcomp := len(mobj.Components)
 	// fmt.Printf("Results: %v\n\n\n", mobj.Components)
 	// log.Println(mobj.Components)
 	// fmt.Printf("Results: %v\n\n\n", mobj.Components[2])
@@ -178,34 +179,92 @@ func main() {
 	/***************************/
 	//run the rest url to get json file
 	/***************************/
-
+	//resp := &http.Response{}
+	//decoder := json.NewDecoder("")
+	var m Message1
+	//mm := make([]Message1, numberofcomp)
 	urlstr3 := "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
-	urlstr3 = urlstr3 + mobj.Components[0].BuildTypeId + ")"
-	log.Println("urlstr3")
-	log.Println(urlstr3)
-	req, err = http.NewRequest("GET", urlstr3, nil)
+
+	fileHandle, err := os.Create("table1.md")
 	if err != nil {
 		log.Fatalln(err)
 	}
-	req.Header.Add("Accept", "application/json")
+	writer := bufio.NewWriter(fileHandle)
+	defer fileHandle.Close()
 
-	resp, err := netClient.Do(req)
-	if err != nil {
-		log.Fatalln(err)
+	fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
+	fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
+	writer.Flush()
+
+	for i := range mobj.Components {
+		log.Println(">>>loop :" + strconv.Itoa(i))
+
+		urlstr4 := urlstr3 + mobj.Components[i].BuildTypeId + ")"
+		log.Println(urlstr3)
+
+		req, err = http.NewRequest("GET", urlstr4, nil)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		req.Header.Add("Accept", "application/json")
+
+		resp, err := netClient.Do(req)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		// _, err = io.Copy(os.Stdout, resp.Body)
+		// fmt.Printf("\nError: %v\n", err)
+		defer resp.Body.Close()
+
+		decoder := json.NewDecoder(resp.Body)
+		err = decoder.Decode(&m)
+		if (err != nil) && (err != io.EOF) {
+			log.Println(err)
+			panic(err)
+			//log.Fatalln(err)
+		}
+		log.Println(">>" + strconv.Itoa(i))
+		//log.Println(mm)
+		log.Println(m)
+		log.Println(m.Number)
+		//log.Println(m[i])
+
+		stringprint := fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[i].BuildOrder, mobj.Components[i].Name, mobj.Components[i].PropertyName, (m.Number), m.WebUrl)
+		fmt.Fprintln(writer, stringprint)
+		writer.Flush()
+
 	}
-	defer resp.Body.Close()
 
-	//	_, err = io.Copy(os.Stdout, resp.Body)
-	//fmt.Printf("Error: %v\n", err)
+	/*
+		urlstr3 = urlstr3 + mobj.Components[0].BuildTypeId + ")"
+		log.Println("urlstr3")
+		log.Println(urlstr3)
+		req, err = http.NewRequest("GET", urlstr3, nil)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		req.Header.Add("Accept", "application/json")
 
-	decoder := json.NewDecoder(resp.Body)
-	//m := Fo{}
-	err = decoder.Decode(&m)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println(m)
-	log.Println(m.Number)
+		resp, err := netClient.Do(req)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		defer resp.Body.Close()
+
+		//	_, err = io.Copy(os.Stdout, resp.Body)
+		//fmt.Printf("Error: %v\n", err)
+
+		decoder := json.NewDecoder(resp.Body)
+		//m := Fo{}
+		err = decoder.Decode(&m)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println(m)
+		log.Println(m.Number)
+	*/
+
 	//defer decoder.Close()
 
 	/***************************/
@@ -220,21 +279,23 @@ func main() {
 	   4 | c-libs | cvsp.c-libs.version | 3.0.14
 	*/
 	/***************************/
-	fileHandle, err := os.Create("table1.md")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	writer := bufio.NewWriter(fileHandle)
-	defer fileHandle.Close()
+	//////////
+	/*	fileHandle, err := os.Create("table1.md")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		writer := bufio.NewWriter(fileHandle)
+		defer fileHandle.Close()
 
-	fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
-	fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
-	writer.Flush()
-	stringprint := fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
-	fmt.Fprintln(writer, stringprint)
-	writer.Flush()
-	stringprint = fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
-	fmt.Fprintln(writer, stringprint)
-	writer.Flush()
+		fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
+		fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
+		writer.Flush()
+		stringprint := fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
+		fmt.Fprintln(writer, stringprint)
+		writer.Flush()
+		stringprint = fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
+		fmt.Fprintln(writer, stringprint)
+		writer.Flush()
+	*/
 
 }
