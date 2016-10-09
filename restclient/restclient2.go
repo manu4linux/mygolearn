@@ -162,7 +162,7 @@ func main() {
 		log.Println(">>>loop :" + strconv.Itoa(i))
 
 		urlstr4 := urlstr3 + mobj.Components[i].BuildTypeId + ")"
-		log.Println(urlstr3)
+		log.Println(urlstr4)
 
 		req, err = http.NewRequest("GET", urlstr4, nil)
 		if err != nil {
@@ -229,7 +229,7 @@ func main() {
 	//mm := make([]Message1, numberofcomp)
 	urlstr3 = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
 
-	fileHandle2, err := os.Create("table1.md")
+	fileHandle2, err := os.Create("table2.md")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -244,7 +244,7 @@ func main() {
 		log.Println(">>>loop :" + strconv.Itoa(i2))
 
 		urlstr4 := urlstr3 + mobj2.Components[i2].BuildTypeId + ")"
-		log.Println(urlstr3)
+		log.Println(urlstr4)
 
 		req, err = http.NewRequest("GET", urlstr4, nil)
 		if err != nil {
