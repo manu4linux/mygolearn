@@ -115,31 +115,11 @@ func main() {
 		log.Fatalln(err)
 	}
 	req.Header.Add("Accept", "application/json")
-	/*
-		resp, err := netClient.Do(req)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		defer resp.Body.Close()
-	*/
-	//_, err = io.Copy(os.Stdout, resp.Body)
-	//fmt.Printf("Error: %v\n", err)
-	/*
-
-		decoder := json.NewDecoder(resp.Body)
-		//m := Fo{}
-		err = decoder.Decode(&m)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		log.Println(m)
-		//defer decoder.Close()
-	*/
 
 	/****************/
-	//Read from a json file
+	//Read table1 config from a json file
 	/****************/
-	pathtofile := "./restclient/ServerRefresh.json"
+	pathtofile := "./restclient/table1config.json"
 	file, e := ioutil.ReadFile(pathtofile)
 	if e != nil {
 		fmt.Printf("File error: %v\n", e)
@@ -159,28 +139,10 @@ func main() {
 	//numberofcomp := len(mobj.Components)
 	// fmt.Printf("Results: %v\n\n\n", mobj.Components)
 	// log.Println(mobj.Components)
-	// fmt.Printf("Results: %v\n\n\n", mobj.Components[2])
-	// log.Println(mobj.Components[3])
-	/*
-		configFile, err := os.Open(pathtofile)
-		if err != nil {
-			log.Println("opening config file", err.Error())
-		}
 
-		decoder2 := json.NewDecoder(configFile)
-		err = decoder2.Decode(&mobj)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		log.Println("second attempt")
-		fmt.Printf("Results: %v\n\n\n", mobj)
-		log.Println(mobj)
-	*/
 	/***************************/
 	//run the rest url to get json file
 	/***************************/
-	//resp := &http.Response{}
-	//decoder := json.NewDecoder("")
 	var m Message1
 	//mm := make([]Message1, numberofcomp)
 	urlstr3 := "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
@@ -236,66 +198,86 @@ func main() {
 
 	}
 
-	/*
-		urlstr3 = urlstr3 + mobj.Components[0].BuildTypeId + ")"
-		log.Println("urlstr3")
+	/****************/
+	//Read table2 config from a json file
+	/****************/
+	pathtofile = "./restclient/table2config.json"
+	file2, e := ioutil.ReadFile(pathtofile)
+	if e != nil {
+		fmt.Printf("File error: %v\n", e)
+		os.Exit(1)
+	}
+	//fmt.Printf("%s\n", string(file2))
+
+	var mobj2 componentjson
+
+	err = json.Unmarshal(file2, &mobj2)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println("first attempt")
+	fmt.Printf("Results: %v\n\n\n", mobj2)
+	log.Println(mobj2)
+	//numberofcomp := len(mobj2.Components)
+	// fmt.Printf("Results: %v\n\n\n", mobj2.Components)
+	// log.Println(mobj2.Components)
+
+	/***************************/
+	//run the rest url to get json file
+	/***************************/
+	var m2 Message1
+	//mm := make([]Message1, numberofcomp)
+	urlstr3 = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
+
+	fileHandle2, err := os.Create("table1.md")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	writer = bufio.NewWriter(fileHandle2)
+	defer fileHandle2.Close()
+
+	fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
+	fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
+	writer.Flush()
+
+	for i2 := range mobj2.Components {
+		log.Println(">>>loop :" + strconv.Itoa(i2))
+
+		urlstr4 := urlstr3 + mobj2.Components[i2].BuildTypeId + ")"
 		log.Println(urlstr3)
-		req, err = http.NewRequest("GET", urlstr3, nil)
+
+		req, err = http.NewRequest("GET", urlstr4, nil)
 		if err != nil {
 			log.Fatalln(err)
 		}
+
 		req.Header.Add("Accept", "application/json")
 
 		resp, err := netClient.Do(req)
 		if err != nil {
 			log.Fatalln(err)
 		}
+		// _, err = io.Copy(os.Stdout, resp.Body)
+		// fmt.Printf("\nError: %v\n", err)
 		defer resp.Body.Close()
 
-		//	_, err = io.Copy(os.Stdout, resp.Body)
-		//fmt.Printf("Error: %v\n", err)
-
 		decoder := json.NewDecoder(resp.Body)
-		//m := Fo{}
-		err = decoder.Decode(&m)
-		if err != nil {
-			log.Fatalln(err)
+		err = decoder.Decode(&m2)
+		if (err != nil) && (err != io.EOF) {
+			log.Println(err)
+			panic(err)
+			//log.Fatalln(err)
 		}
-		log.Println(m)
-		log.Println(m.Number)
-	*/
+		log.Println(">>" + strconv.Itoa(i2))
+		//log.Println(mm)
+		log.Println(m2)
+		log.Println(m2.Number)
+		//log.Println(m[i])
 
-	//defer decoder.Close()
-
-	/***************************/
-	//write the file with latest verion numbers
-
-	/* file will look like below
-	   Build Order | Component | Property Name | Current Version
-	   ----------------|-----------------|----------------------|-----------------------
-	   1 | server-parent | None - this is the Parent Pom and must be directly referenced | [3.0.15](http://teamcity.cvs.ula.comcast.net:8111/viewLog.html?buildId=4062409&buildTypeId=CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)
-	   2 | external | cvsp.external.version |  3.0.20
-	   3 | ace-lib | cvsp.ace-lib.version | 3.0.6
-	   4 | c-libs | cvsp.c-libs.version | 3.0.14
-	*/
-	/***************************/
-	//////////
-	/*	fileHandle, err := os.Create("table1.md")
-		if err != nil {
-			log.Fatalln(err)
-		}
-		writer := bufio.NewWriter(fileHandle)
-		defer fileHandle.Close()
-
-		fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
-		fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
-		writer.Flush()
-		stringprint := fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
+		stringprint := fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj2.Components[i2].BuildOrder, mobj2.Components[i2].Name, mobj2.Components[i2].PropertyName, (m2.Number), m2.WebUrl)
 		fmt.Fprintln(writer, stringprint)
 		writer.Flush()
-		stringprint = fmt.Sprintf("%v | %v | %v | [%v](%v)", mobj.Components[0].Build_order, mobj.Components[0].Name, mobj.Components[0].Property_name, (m.Number), m.WebUrl)
-		fmt.Fprintln(writer, stringprint)
-		writer.Flush()
-	*/
+
+	}
 
 }
