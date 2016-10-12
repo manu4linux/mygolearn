@@ -1,68 +1,3 @@
-/*package main
-
-import (
-	"fmt"
-	"net/http"
-	"net/http/httptest"
-	"time"
-)
-
-func main() {
-	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(time.Hour)
-	}))
-	defer svr.Close()
-	fmt.Println("making request")
-	http.Get(svr.URL)
-	fmt.Println("finished request")
-}
-*/
-
-/*
-//server code
-
-package main
-
-import (
-	"fmt"
-	"net/http"
-)
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
-}
-
-func main() {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8080", nil)
-}
-*/
-
-/********************************************************/
-//client code
-/********************************************************/
-/*
-package main
-
-import (
-	"fmt"
-	"github.com/go-resty/resty"
-)
-
-func main() {
-	// GET request
-	resp, err := resty.R().Get("http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)/number")
-
-	// explore response object
-	fmt.Printf("\nError: %v", err)
-	fmt.Printf("\nResponse Status Code: %v", resp.StatusCode())
-	fmt.Printf("\nResponse Status: %v", resp.Status())
-	fmt.Printf("\nResponse Time: %v", resp.Time())
-	fmt.Printf("\nResponse Recevied At: %v", resp.ReceivedAt())
-	fmt.Printf("\nResponse Body: %v", resp) // or resp.String() or string(resp.Body())
-}
-*/
-
 package main
 
 import (
@@ -79,7 +14,6 @@ import (
 )
 
 var urlstr1 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)"
-var urlstr2 string = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom)/number"
 
 type Message1 struct {
 	Id            json.Number `json:"id,Number"`
@@ -112,14 +46,16 @@ func main() {
 
 	req, err := http.NewRequest("GET", urlstr1, nil)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		panic(err)
+
 	}
 	req.Header.Add("Accept", "application/json")
 
 	/****************/
 	//Read table1 config from a json file
 	/****************/
-	pathtofile := "./restclient/table1config.json"
+	pathtofile := "../config/table1config.json"
 	file, e := ioutil.ReadFile(pathtofile)
 	if e != nil {
 		fmt.Printf("File error: %v\n", e)
@@ -131,7 +67,8 @@ func main() {
 
 	err = json.Unmarshal(file, &mobj)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		panic(err)
 	}
 	log.Println("first attempt")
 	fmt.Printf("Results: %v\n\n\n", mobj)
@@ -147,12 +84,17 @@ func main() {
 	//mm := make([]Message1, numberofcomp)
 	urlstr3 := "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
 
-	fileHandle, err := os.Create("table1.md")
+	fileHandle, err := os.Create("../table1.md")
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		panic(err)
 	}
 	writer := bufio.NewWriter(fileHandle)
 	defer fileHandle.Close()
+
+	fmt.Fprintln(writer, "\nThe following table represents the build order (top to bottom), current versions, and"+
+		"the property names in the poms that represent those versions. As you modify POMs, please make sure to use these property names."+
+		"Note that components with the same build order number can be built in parallel.\nTo add a new component make sure you edit **table1config.json** file\n\n")
 
 	fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
 	fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
@@ -166,14 +108,16 @@ func main() {
 
 		req, err = http.NewRequest("GET", urlstr4, nil)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			panic(err)
 		}
 
 		req.Header.Add("Accept", "application/json")
 
 		resp, err := netClient.Do(req)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			panic(err)
 		}
 		// _, err = io.Copy(os.Stdout, resp.Body)
 		// fmt.Printf("\nError: %v\n", err)
@@ -201,7 +145,7 @@ func main() {
 	/****************/
 	//Read table2 config from a json file
 	/****************/
-	pathtofile = "./restclient/table2config.json"
+	pathtofile = "../config/table2config.json"
 	file2, e := ioutil.ReadFile(pathtofile)
 	if e != nil {
 		fmt.Printf("File error: %v\n", e)
@@ -213,7 +157,8 @@ func main() {
 
 	err = json.Unmarshal(file2, &mobj2)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		panic(err)
 	}
 	log.Println("first attempt")
 	fmt.Printf("Results: %v\n\n\n", mobj2)
@@ -229,12 +174,16 @@ func main() {
 	//mm := make([]Message1, numberofcomp)
 	urlstr3 = "http://teamcity.cvs-a.ula.comcast.net:8111/guestAuth/app/rest/builds/buildType:(id:"
 
-	fileHandle2, err := os.Create("table2.md")
+	fileHandle2, err := os.Create("../table2.md")
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		panic(err)
 	}
 	writer = bufio.NewWriter(fileHandle2)
 	defer fileHandle2.Close()
+
+	fmt.Fprintln(writer, "\nAdditional properties for components that are NOARCH or testing only and may not necessarily need to be rebuilt for the project.\n"+
+		"To add a new component make sure you edit **table2config.json** file\n\n")
 
 	fmt.Fprintln(writer, "Build Order | Component | Property Name | Current Version")
 	fmt.Fprintln(writer, "------------|-----------|---------------|------------------")
@@ -248,14 +197,16 @@ func main() {
 
 		req, err = http.NewRequest("GET", urlstr4, nil)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			panic(err)
 		}
 
 		req.Header.Add("Accept", "application/json")
 
 		resp, err := netClient.Do(req)
 		if err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			panic(err)
 		}
 		// _, err = io.Copy(os.Stdout, resp.Body)
 		// fmt.Printf("\nError: %v\n", err)

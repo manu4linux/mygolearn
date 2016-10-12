@@ -1,0 +1,190 @@
+{
+    "components": [
+        {
+            "name": "server-parent",
+            "property_name": "Parent Pom",
+            "build_order": 1,
+            "BuildTypeId": "CptServers_CptServersLegac_ReleaseBuildTvworksServerParentPom"
+        },
+        {
+            "name": "external",
+            "property_name": "cvsp.external.version",
+            "build_order": 2,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesExt_2"
+        },
+        {
+            "name": "ace-lib",
+            "property_name": "cvsp.ace-lib.version",
+            "build_order": 3,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesAce_2"
+        },
+        {
+            "name": "c-lib",
+            "property_name": "cvsp.c-lib.version",
+            "build_order": 4,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkProjectsGit_ModulesCLibs20Releas"
+        },
+        {
+            "name": "proc-mon",
+            "property_name": "cvsp.proc_mon.version",
+            "build_order": 5,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesPro_2"
+        },
+        {
+            "name": "hoststat",
+            "property_name": "cvsp.hoststat.version",
+            "build_order": 5,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesHos_2"
+        },
+        {
+            "name": "com.comcast.cable.cvs.server-common (modules-server-common)",
+            "property_name": "cvsp.cvs-server-common.version",
+            "build_order": 5,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesSer_2"
+        },
+        {
+            "name": "com.tvworks.server.common (modules-common)",
+            "property_name": "cvsp.tvworks-server-common.version",
+            "build_order": 5,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesCom_3"
+        },
+        {
+            "name": "com.comcast.cable.cvs.http-plugin",
+            "property_name": "cvsp.http-plugin.version",
+            "build_order": 6,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesHtt_2"
+        },
+        {
+            "name": "com.comcast.cable.cvs.command",
+            "property_name": "cvsp.command.version",
+            "build_order": 7,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesCom_2"
+        },
+        {
+            "name": "supervisor",
+            "property_name": "cvsp.supervisor.version",
+            "build_order": 8,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesSup_2"
+        },
+        {
+            "name": "dms",
+            "property_name": "cvsp.dms.version",
+            "build_order": 9,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesDms20"
+        },
+        {
+            "name": "dms-multiplexer",
+            "property_name": "cvsp.dms-multiplexer.version",
+            "build_order": 10,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesDmsMu"
+        },
+        {
+            "name": "cvs-compact RPM",
+            "property_name": "cvsp.cvs-compact.version",
+            "build_order": 11,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesCvsCo"
+        },
+        {
+            "name": "cvs-dms-logging RPM",
+            "property_name": "cvsp.cvs-dms-logging.version",
+            "build_order": 11,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesCvsDm"
+        },
+        {
+            "name": "cvs-server-config RPM",
+            "property_name": "cvsp.cvs-server-config.version",
+            "build_order": 11,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesSer_5"
+        },
+        {
+            "name": "cvs-gcdb-local RPM",
+            "property_name": "cvsp.cvs-gcdb-local.version",
+            "build_order": 11,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_14"
+        },
+        {
+            "name": "tvp_postgresql RPM",
+            "property_name": "cvsp.tvp-postgresql.version",
+            "build_order": 11,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_12"
+        },
+        {
+            "name": "activesentry RPM",
+            "property_name": "cvsp.activesentry.version",
+            "build_order": 11,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_20"
+        },
+        {
+            "name": "mms",
+            "property_name": "cvsp.mms.version",
+            "build_order": 12,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServers_4"
+        },
+        {
+            "name": "mediacast",
+            "property_name": "cvsp.mediacast.version",
+            "build_order": 13,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServers_7"
+        },
+        {
+            "name": "tools (modules-tools)",
+            "property_name": "cvsp.tools.version",
+            "build_order": 14,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServers_9"
+        },
+        {
+            "name": "mms-test",
+            "property_name": "cvsp.mms-test.version",
+            "build_order": 15,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_11"
+        },
+        {
+            "name": "mediacast-test",
+            "property_name": "cvsp.mediacast-test.version",
+            "build_order": 16,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_16"
+        },
+        {
+            "name": "commhost-common (modules-commhost-common)",
+            "property_name": "cvsp.commhost-common.version",
+            "build_order": 17,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServers_3"
+        },
+        {
+            "name": "stm",
+            "property_name": "cvsp.stm.version",
+            "build_order": 18,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesStm20"
+        },
+        {
+            "name": "conduit",
+            "property_name": "cvsp.conduit.version",
+            "build_order": 19,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesCon_2"
+        },
+        {
+            "name": "amr",
+            "property_name": "cvsp.amr.version",
+            "build_order": 20,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_ModulesAmr20"
+        },
+        {
+            "name": "CATS TAP Shared",
+            "property_name": "cvsp.cats.tap-shared.version",
+            "build_order": 99,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_44"
+        },
+        {
+            "name": "ncds",
+            "property_name": "cvsp.ncds.version",
+            "build_order": 99,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_58"
+        },
+        {
+            "name": "gsa",
+            "property_name": "cvsp.gsa.version",
+            "build_order": 99,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_74"
+        }
+    ]
+}

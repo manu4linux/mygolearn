@@ -1,0 +1,22 @@
+{
+    "components": [
+        {
+            "name": "Service Locator",
+            "property_name": "cvsp.service-locator.version",
+            "build_order": 99,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_18"
+        },
+        {
+            "name": "Locality",
+            "property_name": "cvsp.locality.version",
+            "build_order": 99,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_55"
+        },
+        {
+            "name": "Seadac",
+            "property_name": "cvsp.seadac.version",
+            "build_order": 99,
+            "BuildTypeId": "CptServers_CptServersLegac_CptServersCoreNetworkExternalProjectsGit_CptServer_28"
+        }
+    ]
+}
